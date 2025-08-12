@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>มอนิ่งแฟน 💖</title>
+<style>
+  body{
+    margin:0; height:100vh; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,#ff9ff3,#feca57);
+    font-family:sans-serif; color:#fff; text-align:center;
+  }
+  h1{
+    font-size:48px; animation:pop 1s ease forwards;
+    background:linear-gradient(90deg,#6fc5f4,#0877ab);
+    -webkit-background-clip:text; color:transparent;
+  }
+  button{
+    padding:10px 20px; font-size:18px; border:none; border-radius:20px;
+    background:#fff; color:#ff6f61; cursor:pointer; margin-top:12px;
+    box-shadow:0 4px 8px rgba(0,0,0,0.2);
+    transition:transform 0.1s ease;
+  }
+  button:active{ transform:scale(0.95); }
+  @keyframes pop{0%{transform:scale(0.5);opacity:0;}100%{transform:scale(1);opacity:1;}}
+  canvas{position:fixed;top:0;left:0;pointer-events:none;}
+</style>
+</head>
+<body>
+  <div>
+    <h1 id="msg">มอนิ่งนะ เดินทางปลอดภัย 💖</h1>
+    <button id="btn">กดเพื่อให้หัวใจลอย</button>
+  </div>
+  <canvas id="confetti"></canvas>
+
+<script>
+const btn = document.getElementById('btn');
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
+resize(); addEventListener('resize',resize);
+
+btn.onclick = () => {
+  const hearts = [];
+  for(let i=0;i<30;i++){
+    hearts.push({
+      x:Math.random()*canvas.width,
+      y:canvas.height+20,
+      size:12+Math.random()*14,
+      speed:2+Math.random()*2,
+      color:`hsl(${Math.random()*360},80%,70%)`
+    });
+  }
+  function drawHeart(x,y,size,color){
+    ctx.fillStyle=color;
+    ctx.beginPath();
+    ctx.moveTo(x,y);
+    ctx.bezierCurveTo(x-size/2,y-size/2,x-size,y+size/3,x,y+size);
+    ctx.bezierCurveTo(x+size,y+size/3,x+size/2,y-size/2,x,y);
+    ctx.fill();
+  }
+  function frame(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    hearts.forEach(h=>{
+      h.y -= h.speed;
+      drawHeart(h.x,h.y,h.size,h.color);
+    });
+    if(hearts.some(h=>h.y>-20)) requestAnimationFrame(frame);
+  }
+  frame();
+};
+</script>
+</body>
+</html>
